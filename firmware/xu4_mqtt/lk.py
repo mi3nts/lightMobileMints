@@ -10,7 +10,6 @@ import datetime
 import yaml
 import collections
 import json
-import ssl
 from mintsXU4 import mintsSensorReader as mSR
 from mintsXU4 import mintsDefinitions as mD
 
@@ -27,7 +26,7 @@ broker      = mqttBroker
 port        = mqttPort  # Secure port
 mqttUN      = credentials['mqtt']['username'] 
 mqttPW      = credentials['mqtt']['password'] 
-tlsCert     = "/etc/ssl/certs/ca-certificates.crt"  # Put here the path of your TLS cert
+
 decoder = json.JSONDecoder(object_pairs_hook=collections.OrderedDict)
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -36,7 +35,8 @@ def on_connect(client, userdata, flags, rc):
  
     # Subscribing in on_connect() - if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    nodeID = "001e0610c2ed"
+    nodeID = "0242f3f105a8"
+    client.subscribe(nodeID+"/HM3301")
     client.subscribe(nodeID+"/OPCN3")
     client.subscribe(nodeID+"/BME280")
     client.subscribe(nodeID+"/MGS001")
@@ -67,13 +67,6 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.username_pw_set(mqttUN,mqttPW)
-
-client.tls_set(ca_certs=tlsCert, certfile=None,
-                            keyfile=None, cert_reqs=ssl.CERT_REQUIRED,
-                            tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
-
-
-client.tls_insecure_set(True)
-client.connect(broker, port, 60)
+client.username_pw_set("mintstest","eryeNYj9Aj")
+client.connect("mqtt.circ.utdallas.edu", 8883, 60)
 client.loop_forever()

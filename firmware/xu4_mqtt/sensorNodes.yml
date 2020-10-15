@@ -1,0 +1,20 @@
+
+nodes:
+  - 001e0610c2ed
+
+
+sensors:
+  - APDS9002
+  - AS7262
+  - BME280
+  - GL001
+  - GUV001 
+  - MCAM
+  - MGS001
+  - OPCN2
+  - OPCN3
+  - TMG3993
+  - TSL2591
+  - VEML6075
+  
+

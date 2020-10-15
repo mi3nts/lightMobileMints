@@ -1,6 +1,7 @@
 
 from getmac import get_mac_address
 import serial.tools.list_ports
+import yaml
 
 def findPort(find):
     ports = list(serial.tools.list_ports.comports())
@@ -58,9 +59,12 @@ gpsPort                   = findPort("GPS/GNSS Receiver")
 
 # For MQTT 
 mqttCredentialsFile      = 'mintsXU4/credentials.yml'
-mqttBroker               = "mqtt.circ.utdallas.edu"
-mqttPort                 =  8883  # Secure port
+sensorNodesFile          = 'sensorNodes.yml'
 
+mqttBroker               = "mqtt.circ.utdallas.edu"
+mqttPort                 = 8883  # Secure port
+senderNodes              = yaml.load(open(sensorNodesFile))
+print()
 print("----MINTS Definitions-----")
 print("Mac Address                : {0}".format(macAddress))
 print("Data Folder Raw            : {0}".format(dataFolder))
@@ -72,7 +76,7 @@ print("Latest On                  : {0}".format(latestOn))
 print("MQTT On                    : {0}".format(mqttOn))
 print("MQTT Credentials File      : {0}".format(mqttCredentialsFile))
 print("MQTT Broker and Port       : {0}, {1}".format(mqttOn,mqttPort))
-#-------------------------------------------#
+print("Sensor Nodes File          : {0}".format(sensorNodesFile))
 print("Nano Ports :")
 for dev in nanoPorts:
     print("\t{0}".format(dev))
