@@ -42,7 +42,16 @@ def findMacAddress():
     if (macAddress!= None):
         return macAddress.replace(":","")
 
+    macAddress= get_mac_address(interface="wlx7cdd90adbe60")
+    if (macAddress!= None):
+        return macAddress.replace(":","")
+
     return "xxxxxxxx"
+
+
+
+    return "xxxxxxxx"
+
 
 
 

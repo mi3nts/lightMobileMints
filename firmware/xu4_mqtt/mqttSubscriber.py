@@ -18,15 +18,19 @@ from mintsXU4 import mintsDefinitions as mD
 mqttPort            = mD.mqttPort
 mqttBroker          = mD.mqttBroker
 mqttCredentialsFile = mD.mqttCredentialsFile
+sensorNodesFile     = mD.sensorNodesFile
 
 
 # For mqtt 
-credentials = yaml.load(open(mqttCredentialsFile))
-connected   = False  # Stores the connection status
-broker      = mqttBroker  
-port        = mqttPort  # Secure port
-mqttUN      = credentials['mqtt']['username'] 
-mqttPW      = credentials['mqtt']['password'] 
+credentials     = yaml.load(open(mqttCredentialsFile))
+transmitDetail  = yaml.load(open(sensorNodesFile))
+connected    = False  # Stores the connection status
+broker       = mqttBroker  
+port         = mqttPort  # Secure port
+mqttUN       = credentials['mqtt']['username'] 
+mqttPW       = credentials['mqtt']['password'] 
+transmitters = transmitDetail['nodes']
+sensors      = transmitDetail['sensors']
 tlsCert     = "/etc/ssl/certs/ca-certificates.crt"  # Put here the path of your TLS cert
 decoder = json.JSONDecoder(object_pairs_hook=collections.OrderedDict)
 
@@ -36,12 +40,11 @@ def on_connect(client, userdata, flags, rc):
  
     # Subscribing in on_connect() - if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    nodeID = "001e0610c2ed"
-    client.subscribe(nodeID+"/OPCN3")
-    client.subscribe(nodeID+"/BME280")
-    client.subscribe(nodeID+"/MGS001")
-    client.subscribe("mintsTest")
-    
+    for transmitter in transmitters:
+        for sensor in sensors:
+            topic = transmitter+"/"+ sensor
+            client.subscribe(topic)
+            print("Subscrbing to Topic: "+ topic)
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):

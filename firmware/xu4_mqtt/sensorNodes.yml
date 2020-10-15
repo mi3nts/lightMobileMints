@@ -16,5 +16,6 @@ sensors:
   - TMG3993
   - TSL2591
   - VEML6075
-  
+  - IP
+
 
